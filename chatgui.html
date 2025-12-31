@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Screen Chat UI</title>
+
+<style>
+:root{
+    --primary:#2563eb;
+    --bg:#020617;
+    --panel:#0f172a;
+    --card:#1e293b;
+    --text:#e5e7eb;
+    --muted:#94a3b8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    font-family:-apple-system,Segoe UI;
+    background:var(--bg);
+    color:var(--text);
+    overflow:hidden;
+}
+
+/* ===== APP ===== */
+.app{
+    height:100vh;
+    display:flex;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    width:320px;
+    background:var(--panel);
+    border-right:1px solid rgba(255,255,255,.05);
+    display:flex;
+    flex-direction:column;
+}
+
+.sidebar h2{
+    padding:1.2rem;
+    font-size:1.2rem;
+}
+
+.search{
+    padding:0 1.2rem 1rem;
+}
+.search input{
+    width:100%;
+    padding:.7rem 1rem;
+    border-radius:20px;
+    border:none;
+    outline:none;
+    background:var(--card);
+    color:white;
+}
+
+.contacts{
+    flex:1;
+    overflow-y:auto;
+}
+
+.contact{
+    display:flex;
+    gap:.8rem;
+    padding:1rem 1.2rem;
+    cursor:pointer;
+    transition:.2s;
+}
+.contact:hover{
+    background:rgba(255,255,255,.05);
+}
+.avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(120deg,#3b82f6,#22d3ee);
+}
+.contact h4{
+    font-size:.95rem;
+}
+.contact p{
+    font-size:.75rem;
+    color:var(--muted);
+}
+
+/* ===== CHAT PANEL ===== */
+.chat-panel{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== CHAT HEADER ===== */
+.chat-header{
+    height:64px;
+    padding:0 1.5rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    background:rgba(0,0,0,.4);
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+.chat-header h3{
+    font-size:1rem;
+}
+.status{
+    font-size:.75rem;
+    color:#22c55e;
+}
+
+/* ===== CHAT BODY ===== */
+.chat{
+    flex:1;
+    padding:1.5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    overflow-y:auto;
+}
+
+/* ===== MESSAGE ===== */
+.msg{
+    max-width:60%;
+    padding:.8rem 1.1rem;
+    border-radius:18px;
+    font-size:.9rem;
+    animation:fade .25s ease;
+}
+@keyframes fade{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+}
+.msg.received{
+    background:var(--card);
+    align-self:flex-start;
+    border-bottom-left-radius:6px;
+}
+.msg.sent{
+    background:var(--primary);
+    align-self:flex-end;
+    border-bottom-right-radius:6px;
+}
+.seen{
+    font-size:.65rem;
+    color:var(--muted);
+    text-align:right;
+}
+
+/* ===== INPUT ===== */
+.input{
+    padding:1rem 1.5rem;
+    display:flex;
+    gap:.6rem;
+    background:rgba(0,0,0,.5);
+}
+.input input{
+    flex:1;
+    padding:.8rem 1.2rem;
+    border-radius:30px;
+    border:none;
+    outline:none;
+    background:var(--card);
+    color:white;
+}
+.input button{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:none;
+    background:var(--primary);
+    color:white;
+    font-size:1.2rem;
+    cursor:pointer;
+}
+.input button:hover{
+    transform:scale(1.1);
+}
+
+/* ===== SCROLL ===== */
+.chat::-webkit-scrollbar,
+.contacts::-webkit-scrollbar{
+    width:6px;
+}
+.chat::-webkit-scrollbar-thumb,
+.contacts::-webkit-scrollbar-thumb{
+    background:#334155;
+    border-radius:10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .sidebar{
+        display:none;
+    }
+    .msg{
+        max-width:80%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>Messages</h2>
+    <div class="search">
+        <input placeholder="Search">
+    </div>
+    <div class="contacts">
+        <div class="contact">
+            <div class="avatar"></div>
+            <div>
+                <h4>Alex</h4>
+                <p>Typing...</p>
+            </div>
+        </div>
+        <div class="contact">
+            <div class="avatar"></div>
+            <div>
+                <h4>Emma</h4>
+                <p>See you soon</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHAT -->
+<div class="chat-panel">
+
+<div class="chat-header">
+    <div class="avatar"></div>
+    <div>
+        <h3>Alex</h3>
+        <div class="status">● Online</div>
+    </div>
+</div>
+
+<div class="chat" id="chat">
+    <div class="msg received">Hey 👋</div>
+    <div class="msg sent">
+        This is a full screen chat UI 😍
+        <div class="seen">Seen</div>
+    </div>
+</div>
+
+<div class="input">
+    <input id="text" placeholder="Message…">
+    <button onclick="send()">➤</button>
+</div>
+
+</div>
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("text");
+
+function send(){
+    if(input.value.trim()==="") return;
+
+    const msg = document.createElement("div");
+    msg.className="msg sent";
+    msg.innerHTML=`${input.value}<div class="seen">Delivered</div>`;
+    chat.appendChild(msg);
+    input.value="";
+    chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+</body>
+</html>
